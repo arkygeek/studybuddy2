@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -11,10 +12,16 @@ They are going to fire off things like:
   - etc
 """
 
+rooms = [
+  {'id':1, 'name':'Lets learn Python!'},
+  {'id':2, 'name':'Design with me'},
+  {'id':3, 'name':'Frontend Developers'},
+]
 
 def home(request):
-    return render(request, 'home.html')
+    context = {'rooms': rooms}
+    return render(request, 'base/home.html', context)
 
 
-def room(request):
-    return render(request, 'room.html')
+def room(request, pk):
+    return render(request, 'base/room.html')
