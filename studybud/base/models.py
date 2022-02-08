@@ -1,3 +1,4 @@
+from unittest.util import _MAX_LENGTH
 from django.db import models
 
 # Create your models here.
@@ -28,4 +29,22 @@ inside of the database.
       5     ...         ...
       ...
 
+The classes are like models of the database, so that's why it's called models.py
+
 """
+
+class Room(models.Model):
+      #host =
+      #topic =
+      name = models.CharField(max_length=200)
+      description = models.TextField(null=True, blank=True)
+      # by default, the db cannot have an instance of something without having
+      # a value for every entry, so we set null to equal true so that we _can_
+      # have an empty entry here. name, for example, cannot be empty. Likewise,
+      # blank form is ok.
+      #participants =
+      updated = models.DateTimeField(auto_now=True)
+      created = models.DateTimeField(auto_now_add=True)
+
+      def __str__(self):
+            return str(self.name)
