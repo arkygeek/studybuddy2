@@ -20,7 +20,7 @@ rooms = [
 ]
 
 def home(request):
-    context = {'rooms': rooms}
+    context = {'rooms': rooms} # this is the dictionary we pass to the function
     return render(request, 'base/home.html', context)
 
 
@@ -29,5 +29,5 @@ def room(request, pk):
     for i in rooms:
         if i['id'] == int(pk):
             room = i
-    context = {'room': room}
+    context = {'room': room} # this is the dictionary we pass to the function
     return render(request, 'base/room.html', context)
