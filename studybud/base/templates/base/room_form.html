@@ -4,6 +4,11 @@
 
 <div>
   <form method="POST" action="">
+    {% comment %} Inside of every form, we need to add a CSRF_TOKEN. This token
+      will be sent on every form submit, so when we are sending POST requests in
+      Django we need to pass in this token and this is going to send it just to
+      protect against malicious things like cross site forgery attacks etc.
+    {% endcomment %}
     {% csrf_token %}
 
     {{ form.as_p }}

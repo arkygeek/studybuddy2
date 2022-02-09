@@ -1,10 +1,10 @@
-from django.shortcuts import render#, redirect
+from django.shortcuts import render, redirect
 # from django.http import HttpResponse
 # from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 # from django.db.models import Q
 # from django.contrib.auth import authenticate, login, logout
-from .models import Room#, Topic, Message, User
+from .models import Room, Topic, Message, User
 from .forms import RoomForm#, UserForm, MyUserCreationForm
 
 """
@@ -51,5 +51,27 @@ def room(request, pk):
 
 def createRoom(request):
   form = RoomForm()
+
+  if request.method == 'POST':
+    form = RoomForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return redirect('home')
+
+
+
   context = {'form': form}#, 'topics': topics}
+  return render(request, 'base/room_form.html', context)
+
+def updateRoom(request, pk):
+  room = Room.objects.get(id=pk)
+  form = RoomForm(instance=room) # we pass this in to pre-fill the form (I think)
+
+  if request.method == 'POST':
+    form = RoomForm(request.POST, instance=room)
+    if form.is_valid():
+      form.save()
+      return redirect('home')
+
+  context = {'form': form}
   return render(request, 'base/room_form.html', context)

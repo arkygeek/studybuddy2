@@ -34,9 +34,6 @@ The classes are like models of the database, so that's why it's called models.py
 
 """
 
-
-from os import O_NDELAY
-from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User
 
