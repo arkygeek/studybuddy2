@@ -1,35 +1,38 @@
-from multiprocessing import context
-from re import I
-from django.shortcuts import render
-from django.http import HttpResponse
-from .models import Room
+from django.shortcuts import render#, redirect
+# from django.http import HttpResponse
+# from django.contrib import messages
+# from django.contrib.auth.decorators import login_required
+# from django.db.models import Q
+# from django.contrib.auth import authenticate, login, logout
+from .models import Room#, Topic, Message, User
+from .forms import RoomForm#, UserForm, MyUserCreationForm
+
+"""
+Create your views here.
+
+Views are what get called when someone goes to a specific URL.
+These are going to be functions or classes.
+They are going to fire off things like:
+  - queries to the database
+  - any templates that need to be rendered
+  - etc
 
 
-# Create your views here.
-
-# Views are what get called when someone goes to a specific URL.
-# These are going to be functions or classes.
-# They are going to fire off things like:
-#   - queries to the database
-#   - any templates that need to be rendered
-#   - etc
+rooms = [
+  {'id':1, 'name':'Lets learn Python!'},
+  {'id':2, 'name':'Design with me'},
+  {'id':3, 'name':'Frontend Developers'},
+]
 
 
-# rooms = [
-#   {'id':1, 'name':'Lets learn Python!'},
-#   {'id':2, 'name':'Design with me'},
-#   {'id':3, 'name':'Frontend Developers'},
-# ]
+queryset = ModelName.objects.all
 
+queryset  is the variable that holds the response
+ModelName is, well, the model's name
+objects   are the model objects attribute
+all()     is the Method (ex. get(), filter(), exclude(), etc.)
 
-# queryset = ModelName.objects.all
-
-# queryset  is the variable that holds the response
-# ModelName is, well, the model's name
-# objects   are the model objects attribute
-# all()     is the Method (ex. get(), filter(), exclude(), etc.)
-
-
+ """
 
 def home(request):
     rooms = Room.objects.all()
@@ -47,5 +50,6 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 def createRoom(request):
-  context = {}
+  form = RoomForm()
+  context = {'form': form}#, 'topics': topics}
   return render(request, 'base/room_form.html', context)
