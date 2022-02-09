@@ -45,3 +45,7 @@ def room(request, pk):
     room = Room.objects.get(id=pk)
     context = {'room': room} # this is the dictionary we pass to the function
     return render(request, 'base/room.html', context)
+
+def createRoom(request):
+  context = {}
+  return render(request, 'base/room_form.html', context)
