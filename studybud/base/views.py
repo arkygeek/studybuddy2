@@ -35,7 +35,9 @@ all()     is the Method (ex. get(), filter(), exclude(), etc.)
  """
 
 def home(request):
-    rooms = Room.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    rooms = Room.objects.filter(topic__name__icontains=q)
     topics = Topic.objects.all()
     context = {'rooms': rooms, 'topics': topics} # this is the dictionary we pass to the function
     return render(request, 'base/home.html', context)
@@ -45,7 +47,8 @@ def room(request, pk):
     room = None
     # for i in rooms:
     #     if i['id'] == int(pk):
-    #         room = i
+    #         room = idiscord
+
     room = Room.objects.get(id=pk)
     context = {'room': room} # this is the dictionary we pass to the function
     return render(request, 'base/room.html', context)
