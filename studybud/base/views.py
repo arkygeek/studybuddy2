@@ -36,7 +36,8 @@ all()     is the Method (ex. get(), filter(), exclude(), etc.)
 
 def home(request):
     rooms = Room.objects.all()
-    context = {'rooms': rooms} # this is the dictionary we pass to the function
+    topics = Topic.objects.all()
+    context = {'rooms': rooms, 'topics': topics} # this is the dictionary we pass to the function
     return render(request, 'base/home.html', context)
 
 
