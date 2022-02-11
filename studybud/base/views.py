@@ -1,10 +1,9 @@
 from pydoc import describe
 from django.shortcuts import render, redirect
-from django.db.models import Q
 # from django.http import HttpResponse
 # from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
-# from django.db.models import Q
+from django.db.models import Q
 # from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm#, UserForm, MyUserCreationForm
@@ -45,7 +44,10 @@ def home(request):
       Q(description__icontains=q)
     )
     topics = Topic.objects.all()
-    context = {'rooms': rooms, 'topics': topics} # this is the dictionary we pass to the function
+    room_count = rooms.count()
+
+
+    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count} # this is the dictionary we pass to the function
     return render(request, 'base/home.html', context)
 
 
