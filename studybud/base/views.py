@@ -39,6 +39,9 @@ all()     is the Method (ex. get(), filter(), exclude(), etc.)
 
 def loginPage(request): # don't call this login because that is reserved (there is a login() function)
 
+  if request.user.is_authenticated:
+    return redirect('home')
+
   if request.method == 'POST':
     username = request.POST.get('username')
     password = request.POST.get('password')
