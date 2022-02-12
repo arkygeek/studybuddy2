@@ -3,7 +3,7 @@ from pydoc import describe
 from django.shortcuts import render, redirect
 # from django.http import HttpResponse
 from django.contrib import messages
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -90,6 +90,7 @@ def room(request, pk):
     context = {'room': room} # this is the dictionary we pass to the function
     return render(request, 'base/room.html', context)
 
+@login_required(login_url='login') # once we add this "decorator" a user that is not auth if their session id is not in the browser or is not credible they will be redirected, in this case, to the /login page
 def createRoom(request):
   form = RoomForm()
 
