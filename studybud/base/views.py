@@ -1,15 +1,13 @@
 from pydoc import describe
 from django.shortcuts import render, redirect
 # from django.http import HttpResponse
-# from django.contrib import messages
+from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
 # from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm#, UserForm, MyUserCreationForm
-
-
 
 """
 Create your views here.
@@ -38,16 +36,17 @@ all()     is the Method (ex. get(), filter(), exclude(), etc.)
 
  """
 
-
-def loginPage(request):
-  # don't call this login because that is reserved (there is a login() function)
+def loginPage(request): # don't call this login because that is reserved (there is a login() function)
 
   if request.method == 'POST':
     username = request.POST.get('username')
     password = request.POST.get('password')
     try:
-      user =  User
+      user =  User.objjects .get(username=username)
+    except:
+      messages.error(request, 'User does not exist')
 
+    
 
 
   context = {}
