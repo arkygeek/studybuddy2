@@ -38,7 +38,7 @@ all()     is the Method (ex. get(), filter(), exclude(), etc.)
  """
 
 def loginPage(request): # don't call this login because that is reserved (there is a login() function)
-
+  page = 'login'
   if request.user.is_authenticated:
     return redirect('home')
 
@@ -58,13 +58,16 @@ def loginPage(request): # don't call this login because that is reserved (there 
     else:
       messages.error(request, 'Username or password is incorrect')
 
-  context = {}
+  context = {'page': page}
   return render(request, 'base/login_register.html', context)
 
 def logoutUser(request):
     logout(request)
     return redirect('home')
 
+def registerPage(request):
+  page = 'register'
+  return render(request, 'base/login_register.html')
 
 
 def home(request):
