@@ -1,3 +1,4 @@
+from multiprocessing import AuthenticationError
 from pydoc import describe
 from django.shortcuts import render, redirect
 # from django.http import HttpResponse
@@ -5,7 +6,7 @@ from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
-# from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm#, UserForm, MyUserCreationForm
 
@@ -42,15 +43,26 @@ def loginPage(request): # don't call this login because that is reserved (there 
     username = request.POST.get('username')
     password = request.POST.get('password')
     try:
-      user =  User.objjects .get(username=username)
+      user =  User.objects .get(username=username)
     except:
       messages.error(request, 'User does not exist')
 
-    
+    user = authenticate(request, username=username, password=password)
 
+    if user is not None:
+      login(request, user)
+      return redirect('home')
+    else:
+      messages.error(request, 'Username or password is incorrect')
 
   context = {}
   return render(request, 'base/login_register.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
+
+
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
