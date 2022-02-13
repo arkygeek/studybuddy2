@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm#, UserForm, MyUserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 
 """
 Create your views here.
@@ -66,9 +67,8 @@ def logoutUser(request):
     return redirect('home')
 
 def registerPage(request):
-  page = 'register'
-  return render(request, 'base/login_register.html')
-
+  form = UserCreationForm()
+  return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -133,6 +133,10 @@ def updateRoom(request, pk):
 @login_required(login_url='login')
 def deleteRoom(request, pk):
   room = Room.objects.get(id=pk)
+
+  if request.user != room.host:
+    return HttpResponse('You are not allowed here!')
+
   if request.method == 'POST':
     room.delete()
     return redirect('home')
