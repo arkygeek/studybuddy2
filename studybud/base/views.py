@@ -44,7 +44,7 @@ def loginPage(request): # don't call this login because that is reserved (there 
     return redirect('home')
 
   if request.method == 'POST':
-    username = request.POST.get('username')
+    username = request.POST.get('username').lower()
     password = request.POST.get('password')
     try:
       user =  User.objects .get(username=username)
@@ -68,6 +68,20 @@ def logoutUser(request):
 
 def registerPage(request):
   form = UserCreationForm()
+
+  if request.method == 'POST':
+    form = UserCreationForm(request.POST)# this will be the username, password, and all the credentials we send
+    if form.is_valid():
+      user = form.save(commit=False)#we are freezing this form in time here bevcuase we want to access the user that is created right away so to do that we have to add in commit is equal to false so we can actually get that user object. we want to do this becuas if for some reason the user added in say a capital or a different email, we want to make sure that is lowercase automatically. so we want to be able to clean this data.
+      user.username = user.username.lower()
+      user.save()
+      #lets log the user in and send them home
+      login(request, user)
+      return redirect('home')
+    else:
+      messages.error(request, 'An error occurred during registration.')
+      
+
   return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
