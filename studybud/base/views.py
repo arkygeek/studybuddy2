@@ -101,13 +101,9 @@ def home(request):
 
 
 def room(request, pk):
-    room = None
-    # for i in rooms:
-    #     if i['id'] == int(pk):
-    #         room = idiscord
-
     room = Room.objects.get(id=pk)
-    context = {'room': room} # this is the dictionary we pass to the function
+    room_messages = room.message_set.all() # this can be tricky for the first time seeing this. We can query child objects of a specific room. If we take the parent model (in this case we have a room), to get all the children, all we need ot do is specify the model name (we don't put in caps, it's in lowercase) we can do _set.all()
+    context = {'room': room, 'messages': room_messages} # this is the dictionary we pass to the function
     return render(request, 'base/room.html', context)
 
 @login_required(login_url='login') # once we add this "decorator" a user that is not auth if their session id is not in the browser or is not credible they will be redirected, in this case, to the /login page
