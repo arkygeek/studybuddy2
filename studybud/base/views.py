@@ -103,19 +103,27 @@ def room(request, pk):
     room = Room.objects.get(id=pk)
     # this can be tricky for the first time seeing this. We can query child
     # objects of a specific room. If we take the parent model (in this case we
-    # have a room), to get all the children, all we need ot do is specify the
+    # have a room), to get all the children, all we need to do is specify the
     # model name (we don't put in caps, it's in lowercase) we can do _set.all()
     room_messages = room.message_set.all().order_by('-created')
+    participants = room.participants.all()
+
     if request.method == 'POST':
       message = Message.objects.create(
         user = request.user,
         room = room,
         body = request.POST.get('body')
       )
+      room.participants.add(request.user)
       return redirect('room', pk=room.id) # we could NOT do this, but the issue is now this is technically going to be a POST request so we want that page to fully reload to make sure we are back on the page witha  GET request.
-      
 
-    context = {'room': room, 'room_messages': room_messages} # this is the dictionary we pass to the function
+
+    context = { # this is the dictionary we pass to the function
+      'room': room,
+      'room_messages': room_messages,
+      'participants' : participants,
+    }
+
     return render(request, 'base/room.html', context)
 
 # once we add this "decorator" a user that is not auth if their session id is
