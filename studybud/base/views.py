@@ -71,16 +71,16 @@ def registerPage(request):
 
   if request.method == 'POST':
     form = UserCreationForm(request.POST)# this will be the username, password, and all the credentials we send
+
     if form.is_valid():
       user = form.save(commit=False)#we are freezing this form in time here bevcuase we want to access the user that is created right away so to do that we have to add in commit is equal to false so we can actually get that user object. we want to do this becuas if for some reason the user added in say a capital or a different email, we want to make sure that is lowercase automatically. so we want to be able to clean this data.
       user.username = user.username.lower()
       user.save()
-      #lets log the user in and send them home
+      # lets log the user in and send them home
       login(request, user)
       return redirect('home')
     else:
       messages.error(request, 'An error occurred during registration.')
-      
 
   return render(request, 'base/login_register.html', {'form': form})
 
@@ -101,16 +101,19 @@ def home(request):
 
 
 def room(request, pk):
-    room = None
-    # for i in rooms:
-    #     if i['id'] == int(pk):
-    #         room = idiscord
-
     room = Room.objects.get(id=pk)
-    context = {'room': room} # this is the dictionary we pass to the function
+    # this can be tricky for the first time seeing this. We can query child
+    # objects of a specific room. If we take the parent model (in this case we
+    # have a room), to get all the children, all we need ot do is specify the
+    # model name (we don't put in caps, it's in lowercase) we can do _set.all()
+    room_messages = room.message_set.all()
+    context = {'room': room, 'room_messages': room_messages} # this is the dictionary we pass to the function
     return render(request, 'base/room.html', context)
 
-@login_required(login_url='login') # once we add this "decorator" a user that is not auth if their session id is not in the browser or is not credible they will be redirected, in this case, to the /login page
+# once we add this "decorator" a user that is not auth if their session id is
+# not in the browser or is not credible they will be redirected,
+# in this case, to the /login page
+@login_required(login_url='login')
 def createRoom(request):
   form = RoomForm()
 
