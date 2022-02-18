@@ -94,9 +94,15 @@ def home(request):
     )
     topics = Topic.objects.all()
     room_count = rooms.count()
+    room_messages = Message.objects.all()
 
+    context = { # this is the dictionary we pass to the function
+      'rooms': rooms,
+      'topics': topics,
+      'room_count': room_count,
+      'room_messages': room_messages
+    }
 
-    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count} # this is the dictionary we pass to the function
     return render(request, 'base/home.html', context)
 
 def room(request, pk):
