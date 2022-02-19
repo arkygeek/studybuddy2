@@ -132,6 +132,17 @@ def room(request, pk):
 
     return render(request, 'base/room.html', context)
 
+
+def userProfile(request, pk):
+
+  user = User.objects.get(id=pk)
+
+
+  context = {
+    'user': user
+  }
+  return render(request, 'base//profile.html', context)
+
 # once we add this "decorator" a user that is not auth if their session id is
 # not in the browser or is not credible they will be redirected,
 # in this case, to the /login page
