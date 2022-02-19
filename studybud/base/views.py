@@ -111,7 +111,7 @@ def room(request, pk):
     # objects of a specific room. If we take the parent model (in this case we
     # have a room), to get all the children, all we need to do is specify the
     # model name (we don't put in caps, it's in lowercase) we can do _set.all()
-    room_messages = room.message_set.all().order_by('-created')
+    room_messages = room.message_set.all()
     participants = room.participants.all()
 
     if request.method == 'POST':
