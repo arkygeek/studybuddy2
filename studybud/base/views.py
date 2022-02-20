@@ -153,16 +153,24 @@ def userProfile(request, pk):
 @login_required(login_url='login')
 def createRoom(request):
   form = RoomForm()
+  topics = Topic.objects.all()
 
   if request.method == 'POST':
-    form = RoomForm(request.POST)
-    if form.is_valid():
-      form.save()
-      return redirect('home')
+    topic_name = request.POST.get('topic')
+    topic, created = Topic.objects.get_or_create(name=topic_name)
 
+    Room.Objects.create(
+      host=request.user,
+      topic=topic,
+      name=request.POST.get('name'),
+      description=request.POST.get('description'),
+    )
+    return redirect('home')
 
-
-  context = {'form': form}#, 'topics': topics}
+  context = {
+    'form': form,
+    'topics': topics
+  }
   return render(request, 'base/room_form.html', context)
 
 
@@ -209,3 +217,13 @@ def deleteMessage(request, pk):
     return redirect('home')
 
   return render(request, 'base/delete.html', {'obj': message})
+
+
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Topic.objects.filter(name__icontains=q)
+    return render(request, 'base/topics.html', {'topics': topics})
+
+
+def activityPage(request):
+    room_messages = Message.objects.all()
