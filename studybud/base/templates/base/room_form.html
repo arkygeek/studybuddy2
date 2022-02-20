@@ -36,10 +36,14 @@
                 <form method="POST" action="">
                     {% csrf_token %}
                     {{form.as_p}} {% comment %} this line was missing and it caused me immense grief finding it {% endcomment %}
-                    <input type="text"
+                    <div class="form__action">
+                        {% comment %} <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}">Cancel</a> {% endcomment %}
+                        <button class="btn btn--main" type="submit">Submit</button>
+                    </div>
+                    {% comment %} <input type="text"
                            name="body"
                            placeholder="Write you message here..."
-                    />
+                    /> {% endcomment %}
                 </form>
             </div>
         {% endif %}
