@@ -235,3 +235,8 @@ def topicsPage(request):
 
 def activityPage(request):
     room_messages = Message.objects.all()
+
+
+@login_required(login_url='login')
+def updateUser(request):
+  return render(request, 'base/update-user.html')
