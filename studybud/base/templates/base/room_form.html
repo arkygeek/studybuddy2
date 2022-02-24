@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-
 {% block content %}
   <main class="create-room layout">
     <div class="container">
@@ -19,10 +18,21 @@
         </div>
         <div class="layout__body">
 
-
-
           <form class="form" action="" method="POST">
             {% csrf_token %}
+
+            <div class="form__group">
+              <label for="room_topic">Room Name</label>
+              <input required type="text" name="topic" list="topic-list" />
+              <datalist id="topic-list">
+                <select id="room_topic">
+                  <option value="Python">Python</option>
+                  <option value="Django">Django</option>
+
+                </select>
+              </datalist>
+
+            </div>
 
             <div class="form__group">
               <label for="room_name">Room Name</label>
@@ -30,7 +40,7 @@
             </div>
 
             <div class="form__group">
-              <label for="room_name">Room Description</label>
+              <label for="room_description">Room Description</label>
               {{form.description}}
             </div>
 
