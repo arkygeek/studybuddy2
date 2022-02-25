@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
-from .forms import RoomForm#, UserForm, MyUserCreationForm
+from .forms import RoomForm, UserForm#, MyUserCreationForm
 from django.contrib.auth.forms import UserCreationForm
 
 """
@@ -239,4 +239,15 @@ def activityPage(request):
 
 @login_required(login_url='login')
 def updateUser(request):
-  return render(request, 'base/update-user.html')
+  user = request.user
+  form = UserForm(instance=user)
+
+  if request.method == 'POST':
+    form = UserForm(request.POST, instance=user)
+    if form.is_valid():
+      form.save()
+      return redirect('user-profile', pk=user.id)
+  context = {
+    'form': form,
+  }
+  return render(request, 'base/update-user.html', context)
