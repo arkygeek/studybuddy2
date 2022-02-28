@@ -145,7 +145,7 @@ def userProfile(request, pk):
     'room_messages': room_messages,
     'topics': topics
   }
-  return render(request, 'base//profile.html', context)
+  return render(request, 'base/profile.html', context)
 
 # once we add this "decorator" a user that is not auth if their session id is
 # not in the browser or is not credible they will be redirected,
@@ -239,15 +239,13 @@ def activityPage(request):
 
 @login_required(login_url='login')
 def updateUser(request):
-  user = request.user
-  form = UserForm(instance=user)
+    user = request.user
+    form = UserForm(instance=user)
 
-  if request.method == 'POST':
-    form = UserForm(request.POST, instance=user)
-    if form.is_valid():
-      form.save()
-      return redirect('user-profile', pk=user.id)
-  context = {
-    'form': form,
-  }
-  return render(request, 'base/update-user.html', context)
+    if request.method == 'POST':
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+
+    return render(request, 'base/update-user.html', {'form': form})
